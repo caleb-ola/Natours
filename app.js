@@ -7,6 +7,8 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cors = require('cors');
+var cookieParser = require('cookie-parser');
 
 const toursRouter = require('./routes/tourRoutes');
 const usersRouter = require('./routes/userRoutes');
@@ -25,7 +27,16 @@ app.set('views', path.join(__dirname, 'views'));
 // SERVING STATIC FILES
 app.use(express.static(path.join(__dirname, 'public')));
 
+// CORS
+const corsOptions = {
+  origin: 'http://localhost:8000',
+  credentials: true,
+  // optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 //SETTING SECURITY HEADERS
+// app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 app.use(
   helmet({
     crossOriginEmbedderPolicy: false,
@@ -61,6 +72,7 @@ app.use(limiter);
 // BODY PARSER, Reader data from body into req.body
 // app.use(express.json({limit: "10kb"}));
 app.use(express.json());
+app.use(cookieParser());
 
 // DATA SANITIZATION AGAINST NOSQL QUERY INJECTION
 app.use(mongoSanitize());
@@ -85,7 +97,7 @@ app.use(
 // TEST MIDDLEWARE
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  // console.log(x);
+  console.log(req.cookies);
   next();
 });
 

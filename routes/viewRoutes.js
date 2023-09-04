@@ -6,6 +6,7 @@ const {
   getTour,
   getLoginForm,
 } = require('../controllers/viewsController');
+const { protect, ISLoggedIn } = require('../controllers/authController');
 
 // router.get('/', (req, res) => {
 //   res.status(200).render('base', {
@@ -13,6 +14,7 @@ const {
 //     user: 'Caleb',
 //   });
 // });
+router.use(ISLoggedIn);
 
 router.get('/', getOverview);
 router.get('/tours', getOverview);
