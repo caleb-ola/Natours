@@ -5,6 +5,8 @@ const {
   getOverview,
   getTour,
   getLoginForm,
+  getAccount,
+  updateUserData,
 } = require('../controllers/viewsController');
 const { protect, ISLoggedIn } = require('../controllers/authController');
 
@@ -14,11 +16,13 @@ const { protect, ISLoggedIn } = require('../controllers/authController');
 //     user: 'Caleb',
 //   });
 // });
-router.use(ISLoggedIn);
 
-router.get('/', getOverview);
-router.get('/tours', getOverview);
-router.get('/tours/:slug', getTour);
-router.get('/login', getLoginForm);
+router.get('/', ISLoggedIn, getOverview);
+router.get('/tours', ISLoggedIn, getOverview);
+router.get('/tours/:slug', ISLoggedIn, getTour);
+router.get('/login', ISLoggedIn, getLoginForm);
+router.get('/me', protect, getAccount);
+
+router.post('/submit-user-data', protect, updateUserData);
 
 module.exports = router;

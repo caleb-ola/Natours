@@ -5,6 +5,7 @@ const AppError = require('../utils/appError');
 const { promisify } = require('util');
 const sendEmail = require('../utils/email');
 const crypto = require('crypto');
+const { currentUser } = require('./userController');
 
 const generateToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -105,6 +106,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //   ALLOW ACCESS TO PROTECTED ROUTE
   req.user = freshUser;
+  res.locals.user = freshUser;
   next();
 });
 
